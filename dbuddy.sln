@@ -5,6 +5,10 @@ VisualStudioVersion = 17.8.34601.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBuddy.AppUi", "DBuddy.AppUi\DBuddy.AppUi.csproj", "{D2D94E30-47AC-4B30-A190-83D29162187F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBuddy.Model", "DBuddy.Model\DBuddy.Model.csproj", "{F16AE8C7-F031-4A6D-989C-87281278D3DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBuddy.Infrastructure", "DBuddy.Infrastructure\DBuddy.Infrastructure.csproj", "{1DFB5410-D991-4496-8219-DB059E9AE4A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{D2D94E30-47AC-4B30-A190-83D29162187F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2D94E30-47AC-4B30-A190-83D29162187F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2D94E30-47AC-4B30-A190-83D29162187F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F16AE8C7-F031-4A6D-989C-87281278D3DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F16AE8C7-F031-4A6D-989C-87281278D3DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F16AE8C7-F031-4A6D-989C-87281278D3DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F16AE8C7-F031-4A6D-989C-87281278D3DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DFB5410-D991-4496-8219-DB059E9AE4A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DFB5410-D991-4496-8219-DB059E9AE4A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DFB5410-D991-4496-8219-DB059E9AE4A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DFB5410-D991-4496-8219-DB059E9AE4A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
