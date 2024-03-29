@@ -3,10 +3,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-		xmlns:views="clr-namespace:EntityBuddy.Views"
-        x:Class="EntityBuddy.Views.MainWindow"
-		xmlns:vm="using:EntityBuddy.ViewModels"
+		xmlns:views="clr-namespace:DBuddy.AppUi.Views"
+        x:Class="DBuddy.AppUi.Views.MainWindow"
+		xmlns:vm="using:DBuddy.AppUi.ViewModels"
 		x:DataType="vm:MainWindowViewModel"
-        Title="ToDo List"
-		Content="{Binding ContentViewModel}">
+        Title="数据库伙计"
+		Icon="/Assets/logo.ico">
+	<TextBox Watermark="请输入你想说的话"></TextBox>
 </Window>

@@ -1,7 +1,6 @@
-﻿using EntityBuddy.Services;
-using ReactiveUI;
+﻿using ReactiveUI;
 
-namespace EntityBuddy.ViewModels
+namespace DBuddy.AppUi.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
@@ -11,22 +10,12 @@ namespace EntityBuddy.ViewModels
 
         public MainWindowViewModel()
         {
-            var service = new ToDoListService();
-            ToDoList = new ToDoListViewModel(service.GetItems());
-            _contentViewModel = ToDoList;
         }
-
-        public ToDoListViewModel ToDoList { get; }
 
         public ViewModelBase ContentViewModel
         {
             get => _contentViewModel;
             private set => this.RaiseAndSetIfChanged(ref _contentViewModel, value);
-        }
-
-        public void AddItem()
-        {
-            ContentViewModel = new AddItemViewModel();
         }
     }
 }

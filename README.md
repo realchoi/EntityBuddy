@@ -1,3 +1,3 @@
 ### 数据库实体助手
 
-**EntityBuddy** 是一个数据库表和代码实体相关的工具集。
+**DBuddy**，即 DB Buddy（Database Buddy，数据库伙计），是一个与数据库相关的工具集。

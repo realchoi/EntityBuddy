@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace EntityBuddy.Views;
+namespace DBuddy.AppUi.Views;
 
 public partial class MainWindow : Window
 {

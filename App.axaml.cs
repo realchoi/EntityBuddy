@@ -1,10 +1,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using EntityBuddy.ViewModels;
-using EntityBuddy.Views;
+using DBuddy.AppUi.ViewModels;
+using DBuddy.AppUi.Views;
 
-namespace EntityBuddy;
+namespace DBuddy.AppUi;
 
 public partial class App : Application
 {
