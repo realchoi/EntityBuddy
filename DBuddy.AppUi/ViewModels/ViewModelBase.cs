@@ -1,8 +1,7 @@
 ﻿using ReactiveUI;
 
-namespace DBuddy.AppUi.ViewModels
+namespace DBuddy.AppUi.ViewModels;
+
+public class ViewModelBase : ReactiveObject
 {
-    public class ViewModelBase : ReactiveObject
-    {
-    }
 }
