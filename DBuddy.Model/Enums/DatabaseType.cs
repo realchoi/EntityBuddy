@@ -17,7 +17,7 @@ public enum DatabaseType
     /// PostgreSQL
     /// </summary>
     [Description("PostgreSQL")]
-    PostgreSQL = 1,
+    PostgreSql = 1,
 
     /// <summary>
     /// Oracle
@@ -29,11 +29,11 @@ public enum DatabaseType
     /// MySQL
     /// </summary>
     [Description("MySQL")]
-    MySQL = 3,
+    MySql = 3,
 
     /// <summary>
     /// SQLServer
     /// </summary>
-    [Description("SQLServer")]
-    SQLServer = 4
+    [Description("SQL Server")]
+    SqlServer = 4
 }
