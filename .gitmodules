@@ -1,0 +1,3 @@
+[submodule "SpringMountain"]
+	path = SpringMountain
+	url = https://github.com/realchoi/SpringMountain.git

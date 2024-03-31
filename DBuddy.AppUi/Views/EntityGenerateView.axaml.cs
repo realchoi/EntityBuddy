@@ -3,12 +3,12 @@ using System.Data;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using DBuddy.Infrastructure.Tools;
 using DBuddy.Model;
 using DBuddy.Model.Enums;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using Npgsql;
+using SpringMountain.Infrastructure.Tools;
 
 namespace DBuddy.AppUi.Views;
 
@@ -82,7 +82,7 @@ public partial class EntityGenerateView : UserControl
         {
             if (connectionString.StartsWith("postgres://"))
             {
-                connectionString = DbConnTool.GetPgSqlConnStr(connectionString);
+                connectionString = DbConnectionTool.GetPgSqlConnStr(connectionString);
             }
 
             await using (conn = new NpgsqlConnection(connectionString))

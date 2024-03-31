@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBuddy.AppUi", "DBuddy.AppU
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBuddy.Model", "DBuddy.Model\DBuddy.Model.csproj", "{F16AE8C7-F031-4A6D-989C-87281278D3DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBuddy.Infrastructure", "DBuddy.Infrastructure\DBuddy.Infrastructure.csproj", "{1DFB5410-D991-4496-8219-DB059E9AE4A9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SpringMountain", "SpringMountain", "{C87DF38C-C24F-4387-B97A-BB6FA04540FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringMountain.Api.Exceptions.Spec", "SpringMountain\SpringMountain.Api.Exceptions.Spec\SpringMountain.Api.Exceptions.Spec.csproj", "{3625C156-49CD-4791-A44D-2F8E618479E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringMountain.Infrastructure", "SpringMountain\SpringMountain.Infrastructure\SpringMountain.Infrastructure.csproj", "{8A36277F-3922-4852-9FAD-B8D39C23BB4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringMountain.Modularity", "SpringMountain\SpringMountain.Modularity\SpringMountain.Modularity.csproj", "{42D730AD-B7E4-40C8-8203-34CA642ED5A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,15 +29,28 @@ Global
 		{F16AE8C7-F031-4A6D-989C-87281278D3DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F16AE8C7-F031-4A6D-989C-87281278D3DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F16AE8C7-F031-4A6D-989C-87281278D3DE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1DFB5410-D991-4496-8219-DB059E9AE4A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1DFB5410-D991-4496-8219-DB059E9AE4A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1DFB5410-D991-4496-8219-DB059E9AE4A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1DFB5410-D991-4496-8219-DB059E9AE4A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3625C156-49CD-4791-A44D-2F8E618479E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3625C156-49CD-4791-A44D-2F8E618479E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3625C156-49CD-4791-A44D-2F8E618479E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3625C156-49CD-4791-A44D-2F8E618479E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A36277F-3922-4852-9FAD-B8D39C23BB4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A36277F-3922-4852-9FAD-B8D39C23BB4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A36277F-3922-4852-9FAD-B8D39C23BB4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A36277F-3922-4852-9FAD-B8D39C23BB4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42D730AD-B7E4-40C8-8203-34CA642ED5A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42D730AD-B7E4-40C8-8203-34CA642ED5A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42D730AD-B7E4-40C8-8203-34CA642ED5A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42D730AD-B7E4-40C8-8203-34CA642ED5A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2441ADE-2D55-4305-9348-F25E04CB28B9}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3625C156-49CD-4791-A44D-2F8E618479E9} = {C87DF38C-C24F-4387-B97A-BB6FA04540FE}
+		{8A36277F-3922-4852-9FAD-B8D39C23BB4B} = {C87DF38C-C24F-4387-B97A-BB6FA04540FE}
+		{42D730AD-B7E4-40C8-8203-34CA642ED5A2} = {C87DF38C-C24F-4387-B97A-BB6FA04540FE}
 	EndGlobalSection
 EndGlobal
