@@ -48,9 +48,12 @@
             </Button>
             <Label Grid.Row="2" Grid.Column="0" Margin="10">请输入文件保存路径：</Label>
             <TextBox Grid.Row="2" Grid.Column="1" Margin="0 5" x:Name="SavePathTextBox"
-                     Watermark="格式：C:\Users\XXX\Documents" />
+                     Watermark="格式：C:\Users\XXX\Documents" Text="{Binding SaveClassFilePath}" />
             <Label Grid.Row="2" Grid.Column="2" Margin="10" Width="40">或者</Label>
-            <Button Grid.Row="2" Grid.Column="3" Margin="0 5" Background="Gainsboro" FontWeight="Bold">选择路径</Button>
+            <Button Grid.Row="2" Grid.Column="3" Margin="0 5" Background="Gainsboro" FontWeight="Bold"
+                    Command="{Binding SelectSaveClassFilePathCommand}">
+                选择路径
+            </Button>
             <Button Grid.Row="3" Grid.Column="0" Margin="10" Background="Coral" FontWeight="Bold">生成 Class 文件</Button>
         </Grid>
     </StackPanel>
