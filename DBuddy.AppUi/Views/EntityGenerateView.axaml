@@ -19,6 +19,7 @@
             <Label Grid.Row="0" Grid.Column="0" Margin="10">请选择编程语言：</Label>
             <ComboBox Grid.Row="0" Grid.Column="1" Margin="0 5" x:Name="ProgrammingLangComboBox"
                       ItemsSource="{Binding ProgrammingLanguages}" SelectedIndex="0"
+                      SelectedItem="{Binding SelectedProgrammingLanguage}"
                       MinWidth="240" MaxDropDownHeight="300">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -29,6 +30,7 @@
             <Label Grid.Row="0" Grid.Column="2" Margin="10">请选择数据库类型：</Label>
             <ComboBox Grid.Row="0" Grid.Column="3" Margin="0 5" x:Name="DatabaseTypeComboBox"
                       ItemsSource="{Binding DatabaseTypes}" SelectedIndex="0"
+                      SelectedItem="{Binding SelectedDatabaseType}"
                       MinWidth="240" MaxDropDownHeight="300">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -38,12 +40,13 @@
             </ComboBox>
             <Label Grid.Row="1" Grid.Column="0" Margin="10">请输入连接字符串：</Label>
             <TextBox Grid.Row="1" Grid.Column="1" Margin="0 5" x:Name="ConnectionStringTextBox"
-                     Watermark="格式：Server=ip_address;Port=5432;UserId=xxx;Password=xxx;Database=xxx;" />
+                     Watermark="格式：Server=ip_address;Port=5432;UserId=xxx;Password=xxx;Database=xxx;"
+                     Text="{Binding ConnectionString}" />
             <Label Grid.Row="1" Grid.Column="2" Margin="10" Width="40" Background="Green" Foreground="White">
                 <controls:SymbolIcon Symbol="Accept" />
             </Label>
             <Button Grid.Row="1" Grid.Column="3" Margin="0 5" Background="Gainsboro" FontWeight="Bold"
-                    Click="Btn_TestConnect_OnClick">
+                    Command="{Binding TestDbConnectCommand}">
                 测试连接
             </Button>
             <Label Grid.Row="2" Grid.Column="0" Margin="10">请输入文件保存路径：</Label>
