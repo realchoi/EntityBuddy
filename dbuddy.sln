@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringMountain.Infrastructu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringMountain.Modularity", "SpringMountain\SpringMountain.Modularity\SpringMountain.Modularity.csproj", "{42D730AD-B7E4-40C8-8203-34CA642ED5A2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBuddy.Core", "DBuddy.Core\DBuddy.Core.csproj", "{80312169-8CDC-4D10-8368-7D4524123F41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{42D730AD-B7E4-40C8-8203-34CA642ED5A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42D730AD-B7E4-40C8-8203-34CA642ED5A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42D730AD-B7E4-40C8-8203-34CA642ED5A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80312169-8CDC-4D10-8368-7D4524123F41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80312169-8CDC-4D10-8368-7D4524123F41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80312169-8CDC-4D10-8368-7D4524123F41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80312169-8CDC-4D10-8368-7D4524123F41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

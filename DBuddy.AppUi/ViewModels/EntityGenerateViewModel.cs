@@ -3,19 +3,17 @@ using AvaloniaEdit.Utils;
 using DBuddy.Model.Enums;
 using ReactiveUI;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Linq;
 using System.Reactive;
-using System.Threading.Tasks;
 using System.Web;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using DBuddy.Model;
+using DBuddy.Service.Infrastructures.Utils;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
-using Npgsql;
 using SpringMountain.Infrastructure.Tools;
 
 namespace DBuddy.AppUi.ViewModels;
@@ -34,7 +32,14 @@ public class EntityGenerateViewModel : ViewModelBase
         // 初始化事件命令
         TestDbConnectCommand = ReactiveCommand.Create(TestDbConnect);
         SelectSaveClassFilePathCommand = ReactiveCommand.Create(SelectSaveClassFilePath);
+        GenerateClassFileCommand = ReactiveCommand.Create(GenerateClassFile);
     }
+
+    /// <summary>
+    /// 主窗口
+    /// </summary>
+    private static Window MainWindow =>
+        (Application.Current!.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)!.MainWindow!;
 
     #region 下拉选项数据源
 
@@ -112,8 +117,20 @@ public class EntityGenerateViewModel : ViewModelBase
 
     #region 命令事件 Command
 
+    /// <summary>
+    /// 选择保存路径 Command
+    /// </summary>
     public ReactiveCommand<Unit, Unit> SelectSaveClassFilePathCommand { get; }
+
+    /// <summary>
+    /// 测试数据库连接 Command
+    /// </summary>
     public ReactiveCommand<Unit, Unit> TestDbConnectCommand { get; }
+
+    /// <summary>
+    /// 生成 Class 文件 Command
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> GenerateClassFileCommand { get; }
 
     #endregion
 
@@ -135,7 +152,7 @@ public class EntityGenerateViewModel : ViewModelBase
         switch (databaseTypeEnum)
         {
             case DatabaseType.PostgreSql:
-                var errorMsg = await TryConnectPostgreSqlAsync(ConnectionString!);
+                var errorMsg = await DbHelper.TryConnectPostgreSqlAsync(ConnectionString!);
                 if (errorMsg != null)
                 {
                     var errorBox = MessageBoxManager.GetMessageBoxStandard("提示", $"连接失败！\r\n{errorMsg}",
@@ -159,11 +176,36 @@ public class EntityGenerateViewModel : ViewModelBase
         }
     }
 
+
     /// <summary>
-    /// 主窗口
+    /// 生成 Class 文件
     /// </summary>
-    private static Window MainWindow =>
-        (Application.Current!.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)!.MainWindow!;
+    private async void GenerateClassFile()
+    {
+        if (ConnectionString.IsNullOrWhiteSpace())
+        {
+            var infoBox = MessageBoxManager.GetMessageBoxStandard("提示", "连接字符串不能为空！", ButtonEnum.Ok, Icon.Warning);
+            await infoBox.ShowAsync();
+            return;
+        }
+
+        var databaseTypeEnum = (DatabaseType)SelectedDatabaseType!.Value;
+        switch (databaseTypeEnum)
+        {
+            case DatabaseType.PostgreSql:
+                var successBox = MessageBoxManager.GetMessageBoxStandard("提示", "Class 文件生成成功！",
+                    ButtonEnum.Ok, Icon.Success);
+                await successBox.ShowAsync();
+                break;
+            case DatabaseType.Unknown:
+            case DatabaseType.Oracle:
+            case DatabaseType.MySql:
+            case DatabaseType.SqlServer:
+            default:
+                break;
+        }
+    }
+
 
     /// <summary>
     /// 选择 Class 文件保存路径
@@ -201,40 +243,6 @@ public class EntityGenerateViewModel : ViewModelBase
             .Where(item => item.Value != 0)
             .Select(item => new ComboBoxItemDto<int>((int)item.Value, item.Description));
         ProgrammingLanguages.AddRange(programmingLanguages);
-    }
-
-
-    /// <summary>
-    /// 尝试连接 PostgreSQL 数据库
-    /// </summary>
-    /// <param name="connectionString">PostgreSQL 连接字符串</param>
-    /// <returns>错误信息，为空则表示连接成功</returns>
-    private static async Task<string?> TryConnectPostgreSqlAsync(string connectionString)
-    {
-        NpgsqlConnection? conn = null;
-        try
-        {
-            if (connectionString.StartsWith("postgres://"))
-            {
-                connectionString = DbConnectionTool.GetPgSqlConnStr(connectionString);
-            }
-
-            await using (conn = new NpgsqlConnection(connectionString))
-            {
-                await conn.OpenAsync();
-            }
-
-            return null;
-        }
-        catch (Exception ex)
-        {
-            if (conn != null && conn.State != ConnectionState.Closed)
-            {
-                await conn.CloseAsync();
-            }
-
-            return ex.Message;
-        }
     }
 
     #endregion

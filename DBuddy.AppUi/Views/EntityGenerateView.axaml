@@ -57,7 +57,10 @@
                     Command="{Binding SelectSaveClassFilePathCommand}">
                 选择路径
             </Button>
-            <Button Grid.Row="3" Grid.Column="0" Margin="10" Background="Coral" FontWeight="Bold">生成 Class 文件</Button>
+            <Button Grid.Row="3" Grid.Column="0" Margin="10" Background="Coral" FontWeight="Bold"
+                    Command="{Binding GenerateClassFileCommand}">
+                生成 Class 文件
+            </Button>
         </Grid>
     </StackPanel>
 </UserControl>

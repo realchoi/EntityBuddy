@@ -42,6 +42,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\DBuddy.Model\DBuddy.Model.csproj" />
+	  <ProjectReference Include="..\DBuddy.Core\DBuddy.Core.csproj" />
 	  <ProjectReference Include="..\SpringMountain\SpringMountain.Infrastructure\SpringMountain.Infrastructure.csproj" />
 	</ItemGroup>
 
