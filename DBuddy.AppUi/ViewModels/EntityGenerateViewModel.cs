@@ -28,6 +28,8 @@ public class EntityGenerateViewModel : ViewModelBase
         _selectedProgrammingLanguage = new ComboBoxItemDto<int>(-1, "请选择编程语言");
         _selectedDatabaseType = new ComboBoxItemDto<int>(-1, "请选择数据库类型");
         _connectionString = string.Empty;
+        _schemaName = string.Empty;
+        _tableName = string.Empty;
         _saveClassFilePath = string.Empty;
 
         // 初始化事件命令
@@ -59,20 +61,6 @@ public class EntityGenerateViewModel : ViewModelBase
     #region 双向绑定的属性
 
     /// <summary>
-    /// 填写的数据库连接字符串
-    /// </summary>
-    private string _connectionString;
-
-    /// <summary>
-    /// 填写的数据库连接字符串
-    /// </summary>
-    public string ConnectionString
-    {
-        get => _connectionString;
-        set => this.RaiseAndSetIfChanged(ref _connectionString, value);
-    }
-
-    /// <summary>
     /// 选择的编程语言
     /// </summary>
     private ComboBoxItemDto<int> _selectedProgrammingLanguage;
@@ -98,6 +86,48 @@ public class EntityGenerateViewModel : ViewModelBase
     {
         get => _selectedDatabaseType;
         set => this.RaiseAndSetIfChanged(ref _selectedDatabaseType, value);
+    }
+
+    /// <summary>
+    /// 填写的数据库连接字符串
+    /// </summary>
+    private string _connectionString;
+
+    /// <summary>
+    /// 填写的数据库连接字符串
+    /// </summary>
+    public string ConnectionString
+    {
+        get => _connectionString;
+        set => this.RaiseAndSetIfChanged(ref _connectionString, value);
+    }
+
+    /// <summary>
+    /// 架构名称
+    /// </summary>
+    private string _schemaName;
+
+    /// <summary>
+    /// 架构名称
+    /// </summary>
+    public string SchemaName
+    {
+        get => _schemaName;
+        set => this.RaiseAndSetIfChanged(ref _schemaName, value);
+    }
+
+    /// <summary>
+    /// 表名称
+    /// </summary>
+    private string _tableName;
+
+    /// <summary>
+    /// 表名称
+    /// </summary>
+    public string TableName
+    {
+        get => _tableName;
+        set => this.RaiseAndSetIfChanged(ref _tableName, value);
     }
 
     /// <summary>
@@ -153,7 +183,7 @@ public class EntityGenerateViewModel : ViewModelBase
         switch (databaseTypeEnum)
         {
             case DatabaseType.PostgreSql:
-                var errorMsg = await DbHelper.TryConnectPostgreSqlAsync(ConnectionString!);
+                var errorMsg = await DbHelper.TryConnectPostgreSqlAsync(ConnectionString);
                 if (errorMsg != null)
                 {
                     var errorBox = MessageBoxManager.GetMessageBoxStandard("提示", $"连接失败！\r\n{errorMsg}",
@@ -190,12 +220,45 @@ public class EntityGenerateViewModel : ViewModelBase
             return;
         }
 
+        if (SchemaName.IsNullOrWhiteSpace())
+        {
+            var infoBox = MessageBoxManager.GetMessageBoxStandard("提示", "架构名为空时，默认使用 public，是否确定？",
+                ButtonEnum.YesNo, Icon.Warning);
+            var result = await infoBox.ShowAsync();
+            if (result == ButtonResult.No)
+            {
+                return;
+            }
+
+            // 为空则默认使用 public
+            SchemaName = "public";
+        }
+
+        if (TableName.IsNullOrWhiteSpace())
+        {
+            var infoBox = MessageBoxManager.GetMessageBoxStandard("提示", "表名不能为空！", ButtonEnum.Ok, Icon.Warning);
+            await infoBox.ShowAsync();
+            return;
+        }
+
         var databaseTypeEnum = (DatabaseType)SelectedDatabaseType!.Value;
         switch (databaseTypeEnum)
         {
             case DatabaseType.PostgreSql:
+                string content;
                 var service = App.GetService<IGenerateClassService>();
-                var content = await service.GenerateClassFromPostgreSql("", "", "");
+                try
+                {
+                    content = await service.GenerateClassFromPostgreSql(ConnectionString, SchemaName, TableName);
+                }
+                catch (Exception e)
+                {
+                    var errorBox = MessageBoxManager.GetMessageBoxStandard("提示", $"生成失败！\r\n{e.Message}",
+                        ButtonEnum.Ok, Icon.Error);
+                    await errorBox.ShowAsync();
+                    return;
+                }
+
                 var successBox = MessageBoxManager.GetMessageBoxStandard("提示", $"Class 文件生成成功：\r\n{content}",
                     ButtonEnum.Ok, Icon.Success);
                 await successBox.ShowAsync();

@@ -1,6 +1,9 @@
 ﻿using Dapper;
+using DBuddy.Model.Dtos;
+using DBuddy.Service.Infrastructures.Utils;
+using Newtonsoft.Json;
 using Npgsql;
-using SpringMountain.Infrastructure.Tools;
+using SpringMountain.Api.Exceptions.Contracts;
 
 namespace DBuddy.Service.Services;
 
@@ -15,14 +18,16 @@ public class GenerateClassService : IGenerateClassService
     /// <returns>Class 文件内容</returns>
     public async Task<string> GenerateClassFromPostgreSql(string connectionString, string schema, string table)
     {
-        if (connectionString.StartsWith("postgres://"))
-        {
-            connectionString = DbConnectionTool.GetPgSqlConnStr(connectionString);
-        }
+        var errorMessage = await DbHelper.TryConnectPostgreSqlAsync(connectionString);
+        if (errorMessage != null)
+            throw new InvalidParameterException($"数据库连接失败：{errorMessage}");
 
         await using var conn = new NpgsqlConnection(connectionString);
-        // var sql = "";
-        // var x = await conn.QueryAsync<object>(sql);
-        return "还没写好呢";
+        var sql = $@"SELECT column_name ColumnName, data_type DataType, is_nullable Nullable
+FROM information_schema.columns
+WHERE table_schema = '{schema}'
+  AND table_name = '{table}'";
+        var columns = await conn.QueryAsync<TableColumnDto>(sql);
+        return JsonConvert.SerializeObject(columns);
     }
 }

@@ -13,6 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\DBuddy.Model\DBuddy.Model.csproj" />
+      <ProjectReference Include="..\SpringMountain\SpringMountain.Api.Exceptions.Spec\SpringMountain.Api.Exceptions.Spec.csproj" />
       <ProjectReference Include="..\SpringMountain\SpringMountain.Infrastructure\SpringMountain.Infrastructure.csproj" />
     </ItemGroup>
 

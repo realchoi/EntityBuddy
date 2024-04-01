@@ -33,12 +33,14 @@ public static class DbHelper
         }
         catch (Exception ex)
         {
+            return ex.Message;
+        }
+        finally
+        {
             if (conn != null && conn.State != ConnectionState.Closed)
             {
                 await conn.CloseAsync();
             }
-
-            return ex.Message;
         }
     }
 }
