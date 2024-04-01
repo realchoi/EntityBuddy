@@ -7,7 +7,9 @@ using System.Data;
 using System.Linq;
 using System.Reactive;
 using System.Threading.Tasks;
+using System.Web;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using DBuddy.Model;
@@ -26,6 +28,7 @@ public class EntityGenerateViewModel : ViewModelBase
 
         _selectedProgrammingLanguage = new ComboBoxItemDto<int>(-1, "请选择编程语言");
         _selectedDatabaseType = new ComboBoxItemDto<int>(-1, "请选择数据库类型");
+        _connectionString = string.Empty;
         _saveClassFilePath = string.Empty;
 
         // 初始化事件命令
@@ -91,12 +94,14 @@ public class EntityGenerateViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _selectedDatabaseType, value);
     }
 
-    #endregion
-
-    #region Class 文件保存路径
-
+    /// <summary>
+    /// Class 文件保存路径
+    /// </summary>
     private string _saveClassFilePath;
 
+    /// <summary>
+    /// Class 文件保存路径
+    /// </summary>
     public string SaveClassFilePath
     {
         get => _saveClassFilePath;
@@ -105,13 +110,12 @@ public class EntityGenerateViewModel : ViewModelBase
 
     #endregion
 
-    #region Command
+    #region 命令事件 Command
 
     public ReactiveCommand<Unit, Unit> SelectSaveClassFilePathCommand { get; }
     public ReactiveCommand<Unit, Unit> TestDbConnectCommand { get; }
 
     #endregion
-
 
     #region 私有方法
 
@@ -132,7 +136,7 @@ public class EntityGenerateViewModel : ViewModelBase
         {
             case DatabaseType.PostgreSql:
                 var errorMsg = await TryConnectPostgreSqlAsync(ConnectionString!);
-                if (!errorMsg.IsNullOrEmpty())
+                if (errorMsg != null)
                 {
                     var errorBox = MessageBoxManager.GetMessageBoxStandard("提示", $"连接失败！\r\n{errorMsg}",
                         ButtonEnum.Ok, Icon.Error);
@@ -156,31 +160,29 @@ public class EntityGenerateViewModel : ViewModelBase
     }
 
     /// <summary>
+    /// 主窗口
+    /// </summary>
+    private static Window MainWindow =>
+        (Application.Current!.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)!.MainWindow!;
+
+    /// <summary>
     /// 选择 Class 文件保存路径
     /// </summary>
     private async void SelectSaveClassFilePath()
     {
-        // var dialog = new OpenFolderDialog
-        // {
-        //     Title = "选择保存路径",
-        //     Directory = Environment.CurrentDirectory
-        // };
-        // var result = await dialog.ShowAsync(Views.MainWindow.Instance);
-        // if (result != null)
-        // {
-        //     SaveClassFilePath = result;
-        // }
+        var suggestedPath = _saveClassFilePath.IsNullOrWhiteSpace()
+            ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            : _saveClassFilePath;
         var dialog = new FolderPickerOpenOptions
         {
             Title = "选择保存路径",
-            AllowMultiple = false
+            AllowMultiple = false,
+            SuggestedStartLocation = await MainWindow.StorageProvider.TryGetFolderFromPathAsync(new Uri(suggestedPath))
         };
-        var result =
-            await (Application.Current!.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)!.MainWindow!
-                .StorageProvider.OpenFolderPickerAsync(dialog);
+        var result = await MainWindow.StorageProvider.OpenFolderPickerAsync(dialog);
         if (result is { Count: > 0 })
         {
-            SaveClassFilePath = result[0].Path.AbsolutePath;
+            SaveClassFilePath = HttpUtility.UrlDecode(result[0].Path.AbsolutePath);
         }
     }
 
