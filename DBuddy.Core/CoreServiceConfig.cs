@@ -6,11 +6,11 @@ namespace DBuddy.Service;
 public static class CoreServiceConfig
 {
     /// <summary>
-    /// 注入 CoreService 中的服务
+    /// 注入 CoreService 中的服务（单例）
     /// </summary>
-    /// <param name="services"></param>
-    /// <returns></returns>
-    public static IServiceCollection AddCoreServices(this IServiceCollection services)
+    /// <param name="services">DI 容器</param>
+    /// <returns>DI 容器</returns>
+    public static IServiceCollection AddSingletonCoreServices(this IServiceCollection services)
     {
         var assembly = typeof(CoreServiceConfig).Assembly;
         var types = assembly
@@ -26,7 +26,7 @@ public static class CoreServiceConfig
         {
             var baseType = type.GetInterfaces().FirstOrDefault(t => t.Name == $"I{type.Name}");
             if (baseType != null)
-                services.TryAddScoped(baseType, type);
+                services.TryAddSingleton(baseType, type);
         }
 
         return services;

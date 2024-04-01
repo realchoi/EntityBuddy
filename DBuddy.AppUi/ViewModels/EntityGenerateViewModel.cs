@@ -12,6 +12,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using DBuddy.Model;
 using DBuddy.Service.Infrastructures.Utils;
+using DBuddy.Service.Services;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using SpringMountain.Infrastructure.Tools;
@@ -193,7 +194,9 @@ public class EntityGenerateViewModel : ViewModelBase
         switch (databaseTypeEnum)
         {
             case DatabaseType.PostgreSql:
-                var successBox = MessageBoxManager.GetMessageBoxStandard("提示", "Class 文件生成成功！",
+                var service = App.GetService<IGenerateClassService>();
+                var content = await service.GenerateClassFromPostgreSql("", "", "");
+                var successBox = MessageBoxManager.GetMessageBoxStandard("提示", $"Class 文件生成成功：\r\n{content}",
                     ButtonEnum.Ok, Icon.Success);
                 await successBox.ShowAsync();
                 break;

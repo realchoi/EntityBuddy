@@ -21,8 +21,8 @@ public class GenerateClassService : IGenerateClassService
         }
 
         await using var conn = new NpgsqlConnection(connectionString);
-        var sql = "";
-        var x = await conn.QueryAsync<object>(sql);
+        // var sql = "";
+        // var x = await conn.QueryAsync<object>(sql);
         return "还没写好呢";
     }
 }
