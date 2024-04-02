@@ -16,8 +16,8 @@ public class GenerateClassService : IGenerateClassService
     /// <param name="connectionString">PostgreSQL 连接字符串</param>
     /// <param name="schema">架构名</param>
     /// <param name="table">表名</param>
-    /// <returns>Class 文件内容</returns>
-    public async Task<string> GenerateClassFromPostgreSql(string connectionString, string schema, string table)
+    /// <returns>Class 文件内容，为空则表示未查询到传入的表</returns>
+    public async Task<string?> GenerateClassFromPostgreSql(string connectionString, string schema, string table)
     {
         var errorMessage = await DbHelper.TryConnectPostgreSqlAsync(connectionString);
         if (errorMessage != null)
@@ -47,7 +47,6 @@ public class GenerateClassService : IGenerateClassService
                                 using System.Collections.Generic;
                                 using System.Linq;
                                 using System.Text;
-                                using System.Threading.Tasks;
 
                                 namespace DBuddy.Example
                                 {
@@ -56,6 +55,11 @@ public class GenerateClassService : IGenerateClassService
                                 """;
         var content = new StringBuilder();
         var columns = (await conn.QueryAsync<TableColumnDto>(sql, new { schema, table })).ToList();
+        if (columns.Count == 0)
+        {
+            return null;
+        }
+
         var index = 0;
         foreach (var column in columns)
         {

@@ -244,7 +244,7 @@ public class EntityGenerateViewModel : ViewModelBase
         switch (databaseTypeEnum)
         {
             case DatabaseType.PostgreSql:
-                string content;
+                string? content;
                 var service = App.GetService<IGenerateClassService>();
                 try
                 {
@@ -255,6 +255,14 @@ public class EntityGenerateViewModel : ViewModelBase
                     var errorBox = MessageBoxManager.GetMessageBoxStandard("提示", $"生成失败！\r\n{e.Message}",
                         ButtonEnum.Ok, Icon.Error);
                     await errorBox.ShowAsync();
+                    return;
+                }
+
+                if (content == null)
+                {
+                    var infoBox = MessageBoxManager.GetMessageBoxStandard("提示", "未查询到该表，请检查架构名和表名是否正确！",
+                        ButtonEnum.Ok, Icon.Warning);
+                    await infoBox.ShowAsync();
                     return;
                 }
 
