@@ -42,23 +42,44 @@ public class GenerateClassService : IGenerateClassService
                            WHERE c.table_schema = @schema
                              AND c.table_name = @table;
                            """;
+        const string template = """
+                                using System;
+                                using System.Collections.Generic;
+                                using System.Linq;
+                                using System.Text;
+                                using System.Threading.Tasks;
+
+                                namespace DBuddy.Example
+                                {
+                                @CONTENT
+                                }
+                                """;
         var content = new StringBuilder();
-        var columns = await conn.QueryAsync<TableColumnDto>(sql, new { schema, table });
+        var columns = (await conn.QueryAsync<TableColumnDto>(sql, new { schema, table })).ToList();
+        var index = 0;
         foreach (var column in columns)
         {
             var comment = $"""
-                           /// <summary>
-                           /// {column.Comment}
-                           /// </summary>
+                               /// <summary>
+                               /// {column.Comment}
+                               /// </summary>
                            """;
             content.AppendLine(comment);
             var dataType = ColumnDataTypeHelper.ConvertPostgreSqlColumnDataType(column.UdtName, column.IsNullable);
             if (dataType == null)
                 throw new ApiBaseException($"无法识别的数据类型：{column.UdtName}");
-            content.AppendLine("public " + dataType + " " + column.ColumnName.ToPascalCase() + " { get; set; }");
-            content.AppendLine();
+
+            content.Append("    public " + dataType + " " + column.ColumnName.ToPascalCase() + " { get; set; }");
+            if (index < columns.Count - 1)
+            {
+                content.AppendLine();
+                content.AppendLine();
+            }
+
+            index++;
         }
 
-        return content.ToString();
+        var result = template.Replace("@CONTENT", content.ToString());
+        return result;
     }
 }
