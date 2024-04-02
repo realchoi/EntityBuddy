@@ -3,6 +3,7 @@ using AvaloniaEdit.Utils;
 using DBuddy.Model.Enums;
 using ReactiveUI;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Web;
@@ -222,14 +223,6 @@ public class EntityGenerateViewModel : ViewModelBase
 
         if (SchemaName.IsNullOrWhiteSpace())
         {
-            // var infoBox = MessageBoxManager.GetMessageBoxStandard("提示", "架构名为空时，默认使用 public，是否确定？",
-            //     ButtonEnum.YesNo, Icon.Warning);
-            // var result = await infoBox.ShowAsync();
-            // if (result == ButtonResult.No)
-            // {
-            //     return;
-            // }
-
             // 为空则默认使用 public
             SchemaName = "public";
         }
@@ -239,6 +232,12 @@ public class EntityGenerateViewModel : ViewModelBase
             var infoBox = MessageBoxManager.GetMessageBoxStandard("提示", "表名不能为空！", ButtonEnum.Ok, Icon.Warning);
             await infoBox.ShowAsync();
             return;
+        }
+
+        if (SaveClassFilePath.IsNullOrWhiteSpace())
+        {
+            // 默认保存到桌面
+            SaveClassFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         }
 
         var databaseTypeEnum = (DatabaseType)SelectedDatabaseType!.Value;
@@ -259,7 +258,11 @@ public class EntityGenerateViewModel : ViewModelBase
                     return;
                 }
 
-                var successBox = MessageBoxManager.GetMessageBoxStandard("提示", $"Class 文件生成成功：\r\n{content}",
+                var fileName = $"{TableName.ToPascalCase()}.cs";
+                var filePath = Path.Combine(SaveClassFilePath, fileName);
+                await File.WriteAllTextAsync(filePath, content);
+                var successBox = MessageBoxManager.GetMessageBoxStandard("提示",
+                    $"Class 文件生成成功，请查看 {SaveClassFilePath} 下的 {fileName} 文件！",
                     ButtonEnum.Ok, Icon.Success);
                 await successBox.ShowAsync();
                 break;
@@ -279,7 +282,7 @@ public class EntityGenerateViewModel : ViewModelBase
     private async void SelectSaveClassFilePath()
     {
         var suggestedPath = _saveClassFilePath.IsNullOrWhiteSpace()
-            ? Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            ? Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
             : _saveClassFilePath;
         var dialog = new FolderPickerOpenOptions
         {
