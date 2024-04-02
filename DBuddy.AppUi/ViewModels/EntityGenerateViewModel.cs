@@ -222,13 +222,13 @@ public class EntityGenerateViewModel : ViewModelBase
 
         if (SchemaName.IsNullOrWhiteSpace())
         {
-            var infoBox = MessageBoxManager.GetMessageBoxStandard("提示", "架构名为空时，默认使用 public，是否确定？",
-                ButtonEnum.YesNo, Icon.Warning);
-            var result = await infoBox.ShowAsync();
-            if (result == ButtonResult.No)
-            {
-                return;
-            }
+            // var infoBox = MessageBoxManager.GetMessageBoxStandard("提示", "架构名为空时，默认使用 public，是否确定？",
+            //     ButtonEnum.YesNo, Icon.Warning);
+            // var result = await infoBox.ShowAsync();
+            // if (result == ButtonResult.No)
+            // {
+            //     return;
+            // }
 
             // 为空则默认使用 public
             SchemaName = "public";
