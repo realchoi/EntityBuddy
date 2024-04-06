@@ -14,7 +14,6 @@ using Avalonia.Platform.Storage;
 using DBuddy.Model;
 using DBuddy.Service.Infrastructures.Utils;
 using DBuddy.Service.Services;
-using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
 using SpringMountain.Infrastructure.Tools;
 
@@ -175,8 +174,7 @@ public class EntityGenerateViewModel : ViewModelBase
     {
         if (ConnectionString.IsNullOrWhiteSpace())
         {
-            var infoBox = MessageBoxManager.GetMessageBoxStandard("提示", "连接字符串不能为空！", ButtonEnum.Ok, Icon.Warning);
-            await infoBox.ShowAsync();
+            await MessageBoxUtil.ShowMessageBox("提示", "连接字符串不能为空！", ButtonEnum.Ok, Icon.Warning);
             return;
         }
 
@@ -187,15 +185,11 @@ public class EntityGenerateViewModel : ViewModelBase
                 var errorMsg = await DbHelper.TryConnectPostgreSqlAsync(ConnectionString);
                 if (errorMsg != null)
                 {
-                    var errorBox = MessageBoxManager.GetMessageBoxStandard("提示", $"连接失败！\r\n{errorMsg}",
-                        ButtonEnum.Ok, Icon.Error);
-                    await errorBox.ShowAsync();
+                    await MessageBoxUtil.ShowMessageBox("提示", $"连接失败！\r\n{errorMsg}", ButtonEnum.Ok, Icon.Error);
                 }
                 else
                 {
-                    var successBox = MessageBoxManager.GetMessageBoxStandard("提示", "连接成功！\r\n现在可以生成实体了。",
-                        ButtonEnum.Ok, Icon.Success);
-                    await successBox.ShowAsync();
+                    await MessageBoxUtil.ShowMessageBox("提示", "连接成功！\r\n现在可以生成实体了。", ButtonEnum.Ok, Icon.Success);
                 }
 
                 break;
@@ -216,8 +210,7 @@ public class EntityGenerateViewModel : ViewModelBase
     {
         if (ConnectionString.IsNullOrWhiteSpace())
         {
-            var infoBox = MessageBoxManager.GetMessageBoxStandard("提示", "连接字符串不能为空！", ButtonEnum.Ok, Icon.Warning);
-            await infoBox.ShowAsync();
+            await MessageBoxUtil.ShowMessageBox("提示", "连接字符串不能为空！", ButtonEnum.Ok, Icon.Warning);
             return;
         }
 
@@ -229,8 +222,7 @@ public class EntityGenerateViewModel : ViewModelBase
 
         if (TableName.IsNullOrWhiteSpace())
         {
-            var infoBox = MessageBoxManager.GetMessageBoxStandard("提示", "表名不能为空！", ButtonEnum.Ok, Icon.Warning);
-            await infoBox.ShowAsync();
+            await MessageBoxUtil.ShowMessageBox("提示", "表名不能为空！", ButtonEnum.Ok, Icon.Warning);
             return;
         }
 
@@ -252,27 +244,21 @@ public class EntityGenerateViewModel : ViewModelBase
                 }
                 catch (Exception e)
                 {
-                    var errorBox = MessageBoxManager.GetMessageBoxStandard("提示", $"生成失败！\r\n{e.Message}",
-                        ButtonEnum.Ok, Icon.Error);
-                    await errorBox.ShowAsync();
+                    await MessageBoxUtil.ShowMessageBox("提示", $"生成失败！\r\n{e.Message}", ButtonEnum.Ok, Icon.Error);
                     return;
                 }
 
                 if (content == null)
                 {
-                    var infoBox = MessageBoxManager.GetMessageBoxStandard("提示", "未查询到该表，请检查架构名和表名是否正确！",
-                        ButtonEnum.Ok, Icon.Warning);
-                    await infoBox.ShowAsync();
+                    await MessageBoxUtil.ShowMessageBox("提示", "未查询到该表，请检查架构名和表名是否正确！", ButtonEnum.Ok, Icon.Warning);
                     return;
                 }
 
                 var fileName = $"{TableName.ToPascalCase()}.cs";
                 var filePath = Path.Combine(SaveClassFilePath, fileName);
                 await File.WriteAllTextAsync(filePath, content);
-                var successBox = MessageBoxManager.GetMessageBoxStandard("提示",
-                    $"Class 文件生成成功，请查看 {SaveClassFilePath} 下的 {fileName} 文件！",
+                await MessageBoxUtil.ShowMessageBox("提示", $"Class 文件生成成功，请查看 {SaveClassFilePath} 下的 {fileName} 文件！",
                     ButtonEnum.Ok, Icon.Success);
-                await successBox.ShowAsync();
                 break;
             case DatabaseType.Unknown:
             case DatabaseType.Oracle:
