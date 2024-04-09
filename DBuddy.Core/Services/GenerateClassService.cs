@@ -2,7 +2,6 @@
 using Dapper;
 using DBuddy.Model.Dtos;
 using DBuddy.Service.Infrastructures.Utils;
-using Newtonsoft.Json;
 using Npgsql;
 using SpringMountain.Api.Exceptions.Contracts;
 

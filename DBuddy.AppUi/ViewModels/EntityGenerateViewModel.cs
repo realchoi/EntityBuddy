@@ -1,5 +1,5 @@
 ﻿using System;
-using AvaloniaEdit.Utils;
+using System.Collections.Generic;
 using DBuddy.Model.Enums;
 using ReactiveUI;
 using System.Collections.ObjectModel;
@@ -178,7 +178,7 @@ public class EntityGenerateViewModel : ViewModelBase
             return;
         }
 
-        var databaseTypeEnum = (DatabaseType)SelectedDatabaseType!.Value;
+        var databaseTypeEnum = (DatabaseType)SelectedDatabaseType.Value;
         switch (databaseTypeEnum)
         {
             case DatabaseType.PostgreSql:
@@ -232,7 +232,7 @@ public class EntityGenerateViewModel : ViewModelBase
             SaveClassFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         }
 
-        var databaseTypeEnum = (DatabaseType)SelectedDatabaseType!.Value;
+        var databaseTypeEnum = (DatabaseType)SelectedDatabaseType.Value;
         switch (databaseTypeEnum)
         {
             case DatabaseType.PostgreSql:
@@ -300,12 +300,12 @@ public class EntityGenerateViewModel : ViewModelBase
         var databaseTypes = EnumTool.GetAllMembers<DatabaseType>()
             .Where(item => item.Value != 0)
             .Select(item => new ComboBoxItemDto<int>((int)item.Value, item.Description));
-        DatabaseTypes.AddRange(databaseTypes);
+        DatabaseTypes.AddIfNotContains(databaseTypes);
 
         var programmingLanguages = EnumTool.GetAllMembers<ProgrammingLanguage>()
             .Where(item => item.Value != 0)
             .Select(item => new ComboBoxItemDto<int>((int)item.Value, item.Description));
-        ProgrammingLanguages.AddRange(programmingLanguages);
+        ProgrammingLanguages.AddIfNotContains(programmingLanguages);
     }
 
     #endregion
