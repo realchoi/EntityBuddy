@@ -36,6 +36,7 @@ public class EntityGenerateViewModel : ViewModelBase
         TestDbConnectCommand = ReactiveCommand.Create(TestDbConnect);
         SelectSaveClassFilePathCommand = ReactiveCommand.Create(SelectSaveClassFilePath);
         GenerateClassFileCommand = ReactiveCommand.Create(GenerateClassFile);
+        CloseDialogCommand = ReactiveCommand.Create(CloseDialog);
     }
 
     /// <summary>
@@ -162,6 +163,11 @@ public class EntityGenerateViewModel : ViewModelBase
     /// 生成 Class 文件 Command
     /// </summary>
     public ReactiveCommand<Unit, Unit> GenerateClassFileCommand { get; }
+
+    /// <summary>
+    /// 关闭弹窗 Command
+    /// </summary>
+    public ReactiveCommand<Unit, Unit> CloseDialogCommand { get; }
 
     #endregion
 
@@ -291,6 +297,14 @@ public class EntityGenerateViewModel : ViewModelBase
         }
     }
 
+
+    /// <summary>
+    /// 关闭当前弹窗
+    /// </summary>
+    private static void CloseDialog()
+    {
+        VmLocator.MainWindowViewModel.EntityGenerateViewIsOpened = false;
+    }
 
     /// <summary>
     /// 初始化下拉选项数据源

@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using DBuddy.AppUi.ViewModels;
 using DBuddy.AppUi.Views;
 using DBuddy.Service;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace DBuddy.AppUi;
@@ -26,6 +27,7 @@ public partial class App : Application
 
                 // Views and ViewModels
                 // ...
+                // services.AddSingleton<MainWindowViewModel>();
             }).Build();
     }
 
@@ -53,14 +55,15 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        // 添加共享资源
+        var vmLocator = new VmLocator();
+        Resources.Add("VMLocator", vmLocator);
+
         base.OnFrameworkInitializationCompleted();
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainWindowViewModel()
-            };
+            desktop.MainWindow = new MainWindow();
         }
     }
 }

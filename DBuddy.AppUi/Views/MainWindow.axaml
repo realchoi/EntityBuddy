@@ -3,13 +3,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-		xmlns:views="clr-namespace:DBuddy.AppUi.Views"
+        xmlns:views="clr-namespace:DBuddy.AppUi.Views"
         x:Class="DBuddy.AppUi.Views.MainWindow"
-		xmlns:vm="using:DBuddy.AppUi.ViewModels"
-		x:DataType="vm:MainWindowViewModel"
+        xmlns:vm="using:DBuddy.AppUi.ViewModels"
+        xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+        x:DataType="vm:MainWindowViewModel"
         Title="数据库伙计"
-		Icon="/Assets/logo.ico">
-	<StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
-		<Button Margin="0,0,20,0" Command="{Binding OpenEntityGenerateCommand}">表字段生成实体</Button>
-	</StackPanel>
+        Icon="/Assets/logo.ico">
+    <dialogHostAvalonia:DialogHost IsOpen="{Binding	EntityGenerateViewIsOpened}"
+                                   DialogMargin="16"
+                                   DisableOpeningAnimation="True"
+                                   dialogHostAvalonia:DialogHostStyle.CornerRadius="8"
+                                   Background="rgb(111,111,111)">
+        <dialogHostAvalonia:DialogHost.DialogContent>
+            <views:EntityGenerateView />
+        </dialogHostAvalonia:DialogHost.DialogContent>
+
+        <Panel>
+            <views:HomePage />
+        </Panel>
+    </dialogHostAvalonia:DialogHost>
 </Window>

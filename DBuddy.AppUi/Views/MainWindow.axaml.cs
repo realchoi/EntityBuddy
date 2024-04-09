@@ -1,14 +1,18 @@
 using Avalonia.Controls;
+using DBuddy.AppUi.ViewModels;
 
 namespace DBuddy.AppUi.Views;
 
 public partial class MainWindow : Window
 {
+    public MainWindowViewModel MainWindowViewModel { get; } = new();
+
     public MainWindow()
     {
-        Instance = this;
         InitializeComponent();
-    }
 
-    public static MainWindow Instance;
+        MainWindowViewModel = new MainWindowViewModel();
+        VmLocator.MainWindowViewModel = MainWindowViewModel;
+        this.DataContext = MainWindowViewModel;
+    }
 }

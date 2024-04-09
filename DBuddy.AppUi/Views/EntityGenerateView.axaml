@@ -66,6 +66,10 @@
                     Command="{Binding GenerateClassFileCommand}">
                 生成 Class 文件
             </Button>
+            <Button Grid.Row="4" Grid.Column="1" Margin="10" FontWeight="Bold"
+                    Command="{Binding CloseDialogCommand}">
+                关闭
+            </Button>
         </Grid>
     </StackPanel>
 </UserControl>
