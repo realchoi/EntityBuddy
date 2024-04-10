@@ -180,13 +180,13 @@ public class EntityGenerateViewModel : ViewModelBase
     {
         if (SelectedDatabaseType.Value < 0)
         {
-            await MessageBoxUtil.ShowMessageBox("提示", "请选择数据库类型！", ButtonEnum.Ok, Icon.Warning);
+            await MessageBoxUtil.ShowMessageBox("提示", "请选择数据库类型！", Icon.Warning);
             return;
         }
 
         if (ConnectionString.IsNullOrWhiteSpace())
         {
-            await MessageBoxUtil.ShowMessageBox("提示", "连接字符串不能为空！", ButtonEnum.Ok, Icon.Warning);
+            await MessageBoxUtil.ShowMessageBox("提示", "连接字符串不能为空！", Icon.Warning);
             return;
         }
 
@@ -197,11 +197,11 @@ public class EntityGenerateViewModel : ViewModelBase
                 var errorMsg = await DbHelper.TryConnectPostgreSqlAsync(ConnectionString);
                 if (errorMsg != null)
                 {
-                    await MessageBoxUtil.ShowMessageBox("提示", $"连接失败！\r\n{errorMsg}", ButtonEnum.Ok, Icon.Error);
+                    await MessageBoxUtil.ShowMessageBox("提示", $"连接失败！\r\n{errorMsg}", Icon.Error);
                 }
                 else
                 {
-                    await MessageBoxUtil.ShowMessageBox("提示", "连接成功！\r\n现在可以生成实体了。", ButtonEnum.Ok, Icon.Success);
+                    await MessageBoxUtil.ShowMessageBox("提示", "连接成功！\r\n现在可以生成实体了。", Icon.Success);
                 }
 
                 break;
@@ -222,19 +222,19 @@ public class EntityGenerateViewModel : ViewModelBase
     {
         if (SelectedProgrammingLanguage.Value < 0)
         {
-            await MessageBoxUtil.ShowMessageBox("提示", "请选择编程语言！", ButtonEnum.Ok, Icon.Warning);
+            await MessageBoxUtil.ShowMessageBox("提示", "请选择编程语言！", Icon.Warning);
             return;
         }
 
         if (SelectedDatabaseType.Value < 0)
         {
-            await MessageBoxUtil.ShowMessageBox("提示", "请选择数据库类型！", ButtonEnum.Ok, Icon.Warning);
+            await MessageBoxUtil.ShowMessageBox("提示", "请选择数据库类型！", Icon.Warning);
             return;
         }
 
         if (ConnectionString.IsNullOrWhiteSpace())
         {
-            await MessageBoxUtil.ShowMessageBox("提示", "连接字符串不能为空！", ButtonEnum.Ok, Icon.Warning);
+            await MessageBoxUtil.ShowMessageBox("提示", "连接字符串不能为空！", Icon.Warning);
             return;
         }
 
@@ -246,7 +246,7 @@ public class EntityGenerateViewModel : ViewModelBase
 
         if (TableName.IsNullOrWhiteSpace())
         {
-            await MessageBoxUtil.ShowMessageBox("提示", "表名不能为空！", ButtonEnum.Ok, Icon.Warning);
+            await MessageBoxUtil.ShowMessageBox("提示", "表名不能为空！", Icon.Warning);
             return;
         }
 
@@ -267,11 +267,11 @@ public class EntityGenerateViewModel : ViewModelBase
             var filePath = Path.Combine(SaveClassFilePath, fileName!);
             await File.WriteAllTextAsync(filePath, fileContent!);
             await MessageBoxUtil.ShowMessageBox("提示", $"实体生成成功，请查看 {SaveClassFilePath} 下的 {fileName} 文件！",
-                ButtonEnum.Ok, Icon.Success);
+                Icon.Success);
         }
         catch (Exception e)
         {
-            await MessageBoxUtil.ShowMessageBox("提示", e.Message, ButtonEnum.Ok, Icon.Error);
+            await MessageBoxUtil.ShowMessageBox("提示", e.Message, Icon.Error);
         }
     }
 
