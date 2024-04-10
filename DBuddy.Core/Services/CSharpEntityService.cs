@@ -13,6 +13,27 @@ namespace DBuddy.Service.Services;
 public class CSharpEntityService : ICSharpEntityService
 {
     /// <summary>
+    /// C# 类文件内容模板
+    /// </summary>
+    private const string CSharpClassTemplate = """
+                                               using System;
+                                               using System.Collections.Generic;
+                                               using System.Linq;
+                                               using System.Text;
+
+                                               namespace DBuddy.Example
+                                               {
+                                                   /// <summary>
+                                                   /// @COMMENT
+                                                   /// </summary>
+                                                   public class @CLASS
+                                                   {
+                                               @CONTENT
+                                                   }
+                                               }
+                                               """;
+
+    /// <summary>
     /// 从 PostgreSQL 数据库生成实体内容
     /// </summary>
     /// <param name="connectionString">PostgreSQL 连接字符串</param>
@@ -45,17 +66,7 @@ public class CSharpEntityService : ICSharpEntityService
                            WHERE c.table_schema = @schema
                              AND c.table_name = @table;
                            """;
-        const string template = """
-                                using System;
-                                using System.Collections.Generic;
-                                using System.Linq;
-                                using System.Text;
 
-                                namespace DBuddy.Example
-                                {
-                                @CONTENT
-                                }
-                                """;
         var content = new StringBuilder();
         var columns = (await conn.QueryAsync<TableColumnDto>(sql, new { schema, table })).ToList();
         if (columns.Count == 0)
@@ -67,16 +78,16 @@ public class CSharpEntityService : ICSharpEntityService
         foreach (var column in columns)
         {
             var comment = $"""
-                               /// <summary>
-                               /// {column.Comment}
-                               /// </summary>
+                                   /// <summary>
+                                   /// {column.Comment}
+                                   /// </summary>
                            """;
             content.AppendLine(comment);
             var dataType = ColumnDataTypeHelper.ConvertPostgreSqlColumnDataType(column.UdtName, column.IsNullable);
             if (dataType == null)
                 throw new ApiBaseException($"无法识别的数据类型：{column.UdtName}");
 
-            content.Append($"    public {dataType} {StringHelper.ToPascalCase(column.ColumnName)} {{ get; set; }}");
+            content.Append($"        public {dataType} {StringHelper.ToPascalCase(column.ColumnName)} {{ get; set; }}");
             if (index < columns.Count - 1)
             {
                 content.AppendLine();
@@ -86,7 +97,10 @@ public class CSharpEntityService : ICSharpEntityService
             index++;
         }
 
-        var result = template.Replace("@CONTENT", content.ToString());
+        var result = CSharpClassTemplate
+            .Replace("@COMMENT", $"{schema}.{table} 表的实体类")
+            .Replace("@CLASS", StringHelper.ToPascalCase(table))
+            .Replace("@CONTENT", content.ToString());
         return result;
     }
 }
