@@ -7,16 +7,20 @@ using SpringMountain.Api.Exceptions.Contracts;
 
 namespace DBuddy.Service.Services;
 
-public class GenerateClassService : IGenerateClassService
+/// <summary>
+/// C# 实体类服务
+/// </summary>
+public class CSharpEntityService : ICSharpEntityService
 {
     /// <summary>
-    /// 从 PostgreSQL 数据库生成 Class 文件
+    /// 从 PostgreSQL 数据库生成实体内容
     /// </summary>
     /// <param name="connectionString">PostgreSQL 连接字符串</param>
     /// <param name="schema">架构名</param>
     /// <param name="table">表名</param>
     /// <returns>Class 文件内容，为空则表示未查询到传入的表</returns>
-    public async Task<string?> GenerateClassFromPostgreSql(string connectionString, string schema, string table)
+    public async Task<string?> GenerateEntityClassContentFromPostgreSql(
+        string connectionString, string schema, string table)
     {
         var errorMessage = await DbHelper.TryConnectPostgreSqlAsync(connectionString);
         if (errorMessage != null)
@@ -72,7 +76,7 @@ public class GenerateClassService : IGenerateClassService
             if (dataType == null)
                 throw new ApiBaseException($"无法识别的数据类型：{column.UdtName}");
 
-            content.Append("    public " + dataType + " " + column.ColumnName.ToPascalCase() + " { get; set; }");
+            content.Append($"    public {dataType} {StringHelper.ToPascalCase(column.ColumnName)} {{ get; set; }}");
             if (index < columns.Count - 1)
             {
                 content.AppendLine();

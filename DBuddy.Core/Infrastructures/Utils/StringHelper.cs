@@ -5,14 +5,14 @@ namespace DBuddy.Service.Infrastructures.Utils;
 /// <summary>
 /// 字符串处理工具类
 /// </summary>
-public static class StringExtension
+public static class StringHelper
 {
     /// <summary>
     /// 将字符串从下划线命名风格或者小驼峰命名风格转换为大驼峰命名风格
     /// </summary>
     /// <param name="str"></param>
     /// <returns></returns>
-    public static string ToPascalCase(this string str)
+    public static string ToPascalCase(string str)
     {
         // 将下划线转换为空格
         str = Regex.Replace(str, @"_", " ");

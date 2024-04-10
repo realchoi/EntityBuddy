@@ -22,6 +22,7 @@ public partial class App : Application
             ConfigureServices((context, services) =>
             {
                 // Services
+                services.AddSingletonAppUiServices();
                 services.AddSingletonCoreServices();
                 // services.AddSingleton<IGenerateClassService, GenerateClassService>();
 

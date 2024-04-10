@@ -11,9 +11,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+using DBuddy.AppUi.Services;
 using DBuddy.Model;
 using DBuddy.Service.Infrastructures.Utils;
-using DBuddy.Service.Services;
 using MsBox.Avalonia.Enums;
 using SpringMountain.Infrastructure.Tools;
 
@@ -256,40 +256,22 @@ public class EntityGenerateViewModel : ViewModelBase
             SaveClassFilePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         }
 
-        var databaseTypeEnum = (DatabaseType)SelectedDatabaseType.Value;
-        switch (databaseTypeEnum)
+        var lang = (ProgrammingLanguage)SelectedProgrammingLanguage.Value;
+        var dbType = (DatabaseType)SelectedDatabaseType.Value;
+        var entityGenerateService = App.GetService<IEntityGenerateService>();
+        try
         {
-            case DatabaseType.PostgreSql:
-                string? content;
-                var service = App.GetService<IGenerateClassService>();
-                try
-                {
-                    content = await service.GenerateClassFromPostgreSql(ConnectionString, SchemaName, TableName);
-                }
-                catch (Exception e)
-                {
-                    await MessageBoxUtil.ShowMessageBox("提示", $"生成失败！\r\n{e.Message}", ButtonEnum.Ok, Icon.Error);
-                    return;
-                }
-
-                if (content == null)
-                {
-                    await MessageBoxUtil.ShowMessageBox("提示", "未查询到该表，请检查架构名和表名是否正确！", ButtonEnum.Ok, Icon.Warning);
-                    return;
-                }
-
-                var fileName = $"{TableName.ToPascalCase()}.cs";
-                var filePath = Path.Combine(SaveClassFilePath, fileName);
-                await File.WriteAllTextAsync(filePath, content);
-                await MessageBoxUtil.ShowMessageBox("提示", $"Class 文件生成成功，请查看 {SaveClassFilePath} 下的 {fileName} 文件！",
-                    ButtonEnum.Ok, Icon.Success);
-                break;
-            case DatabaseType.Unknown:
-            case DatabaseType.Oracle:
-            case DatabaseType.MySql:
-            case DatabaseType.SqlServer:
-            default:
-                break;
+            var (fileName, fileContent) = await entityGenerateService.GenerateEntityClassContent(
+                lang, dbType, ConnectionString, SchemaName, TableName
+            );
+            var filePath = Path.Combine(SaveClassFilePath, fileName!);
+            await File.WriteAllTextAsync(filePath, fileContent!);
+            await MessageBoxUtil.ShowMessageBox("提示", $"实体生成成功，请查看 {SaveClassFilePath} 下的 {fileName} 文件！",
+                ButtonEnum.Ok, Icon.Success);
+        }
+        catch (Exception e)
+        {
+            await MessageBoxUtil.ShowMessageBox("提示", e.Message, ButtonEnum.Ok, Icon.Error);
         }
     }
 
