@@ -6,7 +6,11 @@
              x:Class="DBuddy.AppUi.Views.HomePage"
              xmlns:vm="using:DBuddy.AppUi.ViewModels"
              x:DataType="vm:HomePageViewModel">
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-        <Button Margin="0,0,20,0" Command="{Binding OpenEntityGenerateCommand}">表字段生成实体2</Button>
+    <StackPanel Margin="10">
+        <Grid ShowGridLines="False" Margin="5" ColumnDefinitions="Auto, *, Auto, *"
+              RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto">
+            <Button Grid.Row="0" Grid.Column="0" Margin="5 0" Command="{Binding OpenEntityGenerateCommand}">表字段生成实体</Button>
+            <Button Grid.Row="0" Grid.Column="1" Margin="5 0">表结构导出为 Excel</Button>
+        </Grid>
     </StackPanel>
 </UserControl>

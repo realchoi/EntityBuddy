@@ -5,7 +5,7 @@ namespace DBuddy.AppUi.Views;
 
 public partial class MainWindow : Window
 {
-    public MainWindowViewModel MainWindowViewModel { get; } = new();
+    public MainWindowViewModel MainWindowViewModel { get; }
 
     public MainWindow()
     {

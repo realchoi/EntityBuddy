@@ -25,8 +25,8 @@ public class EntityGenerateViewModel : ViewModelBase
     {
         InitComboBoxSource();
 
-        _selectedProgrammingLanguage = new ComboBoxItemDto<int>(-1, "请选择编程语言");
-        _selectedDatabaseType = new ComboBoxItemDto<int>(-1, "请选择数据库类型");
+        _selectedProgrammingLanguage = ProgrammingLanguages.First();
+        _selectedDatabaseType = DatabaseTypes.First();
         _connectionString = string.Empty;
         _schemaName = string.Empty;
         _tableName = string.Empty;
@@ -178,6 +178,12 @@ public class EntityGenerateViewModel : ViewModelBase
     /// </summary>
     private async void TestDbConnect()
     {
+        if (SelectedDatabaseType.Value < 0)
+        {
+            await MessageBoxUtil.ShowMessageBox("提示", "请选择数据库类型！", ButtonEnum.Ok, Icon.Warning);
+            return;
+        }
+
         if (ConnectionString.IsNullOrWhiteSpace())
         {
             await MessageBoxUtil.ShowMessageBox("提示", "连接字符串不能为空！", ButtonEnum.Ok, Icon.Warning);
@@ -214,6 +220,18 @@ public class EntityGenerateViewModel : ViewModelBase
     /// </summary>
     private async void GenerateClassFile()
     {
+        if (SelectedProgrammingLanguage.Value < 0)
+        {
+            await MessageBoxUtil.ShowMessageBox("提示", "请选择编程语言！", ButtonEnum.Ok, Icon.Warning);
+            return;
+        }
+
+        if (SelectedDatabaseType.Value < 0)
+        {
+            await MessageBoxUtil.ShowMessageBox("提示", "请选择数据库类型！", ButtonEnum.Ok, Icon.Warning);
+            return;
+        }
+
         if (ConnectionString.IsNullOrWhiteSpace())
         {
             await MessageBoxUtil.ShowMessageBox("提示", "连接字符串不能为空！", ButtonEnum.Ok, Icon.Warning);
@@ -311,15 +329,31 @@ public class EntityGenerateViewModel : ViewModelBase
     /// </summary>
     private void InitComboBoxSource()
     {
-        var databaseTypes = EnumTool.GetAllMembers<DatabaseType>()
-            .Where(item => item.Value != 0)
-            .Select(item => new ComboBoxItemDto<int>((int)item.Value, item.Description));
-        DatabaseTypes.AddIfNotContains(databaseTypes);
-
         var programmingLanguages = EnumTool.GetAllMembers<ProgrammingLanguage>()
             .Where(item => item.Value != 0)
-            .Select(item => new ComboBoxItemDto<int>((int)item.Value, item.Description));
-        ProgrammingLanguages.AddIfNotContains(programmingLanguages);
+            .Select(item => new ComboBoxItemDto<int>((int)item.Value, item.Description))
+            .ToList();
+        if (programmingLanguages.Count != 0)
+        {
+            ProgrammingLanguages.AddIfNotContains(programmingLanguages);
+        }
+        else
+        {
+            ProgrammingLanguages.Add(new ComboBoxItemDto<int>(-1, "请选择编程语言", false));
+        }
+
+        var databaseTypes = EnumTool.GetAllMembers<DatabaseType>()
+            .Where(item => item.Value != 0)
+            .Select(item => new ComboBoxItemDto<int>((int)item.Value, item.Description))
+            .ToList();
+        if (databaseTypes.Count != 0)
+        {
+            DatabaseTypes.AddIfNotContains(databaseTypes);
+        }
+        else
+        {
+            DatabaseTypes.Add(new ComboBoxItemDto<int>(-1, "请选择数据库类型", false));
+        }
     }
 
     #endregion
