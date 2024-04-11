@@ -14,7 +14,7 @@
                                    DialogMargin="16"
                                    DisableOpeningAnimation="True"
                                    dialogHostAvalonia:DialogHostStyle.CornerRadius="8"
-                                   Background="rgb(111,111,111)">
+                                   Background="rgb(243,243,243)">
         <dialogHostAvalonia:DialogHost.DialogContent>
             <views:EntityGenerateView />
         </dialogHostAvalonia:DialogHost.DialogContent>

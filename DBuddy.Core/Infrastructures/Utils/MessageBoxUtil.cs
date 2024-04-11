@@ -1,5 +1,8 @@
-﻿using MsBox.Avalonia;
+﻿using Avalonia.Controls;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
+using MsBox.Avalonia.Models;
 
 namespace DBuddy.Service.Infrastructures.Utils;
 
@@ -14,11 +17,26 @@ public static class MessageBoxUtil
     /// <param name="title">弹窗标题</param>
     /// <param name="message">弹窗内容</param>
     /// <param name="icon">弹窗图标</param>
-    /// <param name="button">弹窗按钮</param>
-    public static async Task ShowMessageBox(string title, string message,
-        Icon icon = Icon.Info, ButtonEnum button = ButtonEnum.Ok)
+    public static async Task ShowMessageBox(string title, string message, Icon icon = Icon.Info)
     {
-        var msBox = MessageBoxManager.GetMessageBoxStandard(title, message, button, icon);
-        await msBox.ShowAsync();
+        var box = MessageBoxManager.GetMessageBoxCustom(
+            new MessageBoxCustomParams
+            {
+                ButtonDefinitions = new List<ButtonDefinition>
+                {
+                    new() { Name = "好的" }
+                },
+                ContentTitle = title,
+                ContentMessage = message,
+                Icon = icon,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                CanResize = false,
+                MaxWidth = 500,
+                MaxHeight = 800,
+                SizeToContent = SizeToContent.WidthAndHeight,
+                ShowInCenter = true,
+                Topmost = false
+            });
+        await box.ShowAsync();
     }
 }
