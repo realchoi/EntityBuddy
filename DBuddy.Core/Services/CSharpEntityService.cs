@@ -2,6 +2,7 @@
 using Dapper;
 using DBuddy.Model.Dtos;
 using DBuddy.Service.Infrastructures.Utils;
+using MySql.Data.MySqlClient;
 using Npgsql;
 using SpringMountain.Api.Exceptions.Contracts;
 
@@ -83,7 +84,75 @@ public class CSharpEntityService : ICSharpEntityService
                                    /// </summary>
                            """;
             content.AppendLine(comment);
-            var dataType = ColumnDataTypeHelper.ConvertPostgreSqlColumnDataType(column.UdtName, column.IsNullable);
+            var dataType =
+                ColumnDataTypeHelper.ConvertPostgreSqlColumnDataTypeToCSharp(column.UdtName, column.IsNullable);
+            if (dataType == null)
+                throw new ApiBaseException($"无法识别的数据类型：{column.UdtName}");
+
+            content.Append($"        public {dataType} {StringHelper.ToPascalCase(column.ColumnName)} {{ get; set; }}");
+            if (index < columns.Count - 1)
+            {
+                content.AppendLine();
+                content.AppendLine();
+            }
+
+            index++;
+        }
+
+        var result = CSharpClassTemplate
+            .Replace("@COMMENT", $"{schema}.{table} 表的实体类")
+            .Replace("@CLASS", StringHelper.ToPascalCase(table))
+            .Replace("@CONTENT", content.ToString());
+        return result;
+    }
+
+
+    /// <summary>
+    /// 从 MySQL 数据库生成实体内容
+    /// </summary>
+    /// <param name="connectionString">PostgreSQL 连接字符串</param>
+    /// <param name="schema">架构名</param>
+    /// <param name="table">表名</param>
+    /// <returns>Class 文件内容，为空则表示未查询到传入的表</returns>
+    public async Task<string?> GenerateEntityClassContentFromMySql(
+        string connectionString, string schema, string table)
+    {
+        var errorMessage = await DbHelper.TryConnectMySqlAsync(connectionString);
+        if (errorMessage != null)
+            throw new InvalidParameterException($"数据库连接失败：{errorMessage}");
+
+        await using var conn = new MySqlConnection(connectionString);
+        const string sql = """
+                           SELECT
+                               COLUMN_NAME AS 'ColumnName',
+                               COLUMN_TYPE AS 'UdtName',
+                               IS_NULLABLE AS 'IsNullable',
+                               (CASE WHEN COLUMN_COMMENT IS NOT null AND COLUMN_COMMENT <> '' THEN COLUMN_COMMENT ELSE COLUMN_NAME END) AS 'Comment'
+                           FROM
+                               INFORMATION_SCHEMA.COLUMNS
+                           WHERE
+                               TABLE_SCHEMA = @schema
+                               AND TABLE_NAME = @table;
+                           """;
+
+        var content = new StringBuilder();
+        var columns = (await conn.QueryAsync<TableColumnDto>(sql, new { schema, table })).ToList();
+        if (columns.Count == 0)
+        {
+            return null;
+        }
+
+        var index = 0;
+        foreach (var column in columns)
+        {
+            var comment = $"""
+                                   /// <summary>
+                                   /// {column.Comment}
+                                   /// </summary>
+                           """;
+            content.AppendLine(comment);
+            var dataType =
+                ColumnDataTypeHelper.ConvertMySqlColumnDataTypeToCSharp(column.UdtName, column.IsNullable);
             if (dataType == null)
                 throw new ApiBaseException($"无法识别的数据类型：{column.UdtName}");
 

@@ -44,8 +44,8 @@ public class EntityGenerateService : IEntityGenerateService
                             throw new InvalidParameterException("Oracle 暂未实现");
                             break;
                         case DatabaseType.MySql:
-                            fileContent = null;
-                            throw new InvalidParameterException("MySql 暂未实现");
+                            fileContent = await cSharpEntityService.GenerateEntityClassContentFromMySql
+                                (connectionString, schema, table);
                             break;
                         case DatabaseType.SqlServer:
                             fileContent = null;
