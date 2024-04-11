@@ -49,10 +49,10 @@ public class CSharpEntityService : ICSharpEntityService
 
         await using var conn = new NpgsqlConnection(connectionString);
         const string sql = """
-                           SELECT c.column_name AS ColumnName,
-                                  c.udt_name AS UdtName,
-                                  c.is_nullable AS IsNullable,
-                                  pgd.description AS Comment
+                           SELECT c.column_name                              AS ColumnName,
+                                  c.udt_name                                 AS UdtName,
+                                  c.is_nullable                              AS IsNullable,
+                                  (coalesce(pgd.description, c.column_name)) AS Comment
                            FROM information_schema.columns c
                                     LEFT JOIN pg_catalog.pg_description pgd
                                               ON pgd.objoid = (SELECT attrelid
