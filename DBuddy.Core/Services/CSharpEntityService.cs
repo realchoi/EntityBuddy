@@ -41,8 +41,7 @@ public class CSharpEntityService : ICSharpEntityService
     /// <param name="schema">架构名</param>
     /// <param name="table">表名</param>
     /// <returns>Class 文件内容，为空则表示未查询到传入的表</returns>
-    public async Task<string?> GenerateEntityClassContentFromPostgreSql(
-        string connectionString, string schema, string table)
+    public async Task<string?> GenerateFromPostgreSql(string connectionString, string schema, string table)
     {
         var errorMessage = await DbHelper.TryConnectPostgreSqlAsync(connectionString);
         if (errorMessage != null)
@@ -114,8 +113,7 @@ public class CSharpEntityService : ICSharpEntityService
     /// <param name="schema">架构名</param>
     /// <param name="table">表名</param>
     /// <returns>Class 文件内容，为空则表示未查询到传入的表</returns>
-    public async Task<string?> GenerateEntityClassContentFromMySql(
-        string connectionString, string schema, string table)
+    public async Task<string?> GenerateFromMySql(string connectionString, string schema, string table)
     {
         var errorMessage = await DbHelper.TryConnectMySqlAsync(connectionString);
         if (errorMessage != null)

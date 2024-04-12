@@ -12,7 +12,7 @@ public interface ICSharpEntityService
     /// <param name="schema">架构名</param>
     /// <param name="table">表名</param>
     /// <returns>Class 文件内容，为空则表示未查询到传入的表</returns>
-    Task<string?> GenerateEntityClassContentFromPostgreSql(string connectionString, string schema, string table);
+    Task<string?> GenerateFromPostgreSql(string connectionString, string schema, string table);
 
     /// <summary>
     /// 从 MySQL 数据库生成实体内容
@@ -21,5 +21,5 @@ public interface ICSharpEntityService
     /// <param name="schema">架构名</param>
     /// <param name="table">表名</param>
     /// <returns>Class 文件内容，为空则表示未查询到传入的表</returns>
-    Task<string?> GenerateEntityClassContentFromMySql(string connectionString, string schema, string table);
+    Task<string?> GenerateFromMySql(string connectionString, string schema, string table);
 }

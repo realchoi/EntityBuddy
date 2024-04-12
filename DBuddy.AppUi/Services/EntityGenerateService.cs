@@ -36,7 +36,7 @@ public class EntityGenerateService : IEntityGenerateService
                     switch (dbType)
                     {
                         case DatabaseType.PostgreSql:
-                            fileContent = await cSharpEntityService.GenerateEntityClassContentFromPostgreSql
+                            fileContent = await cSharpEntityService.GenerateFromPostgreSql
                                 (connectionString, schema, table);
                             break;
                         case DatabaseType.Oracle:
@@ -44,7 +44,7 @@ public class EntityGenerateService : IEntityGenerateService
                             throw new InvalidParameterException("Oracle 暂未实现");
                             break;
                         case DatabaseType.MySql:
-                            fileContent = await cSharpEntityService.GenerateEntityClassContentFromMySql
+                            fileContent = await cSharpEntityService.GenerateFromMySql
                                 (connectionString, schema, table);
                             break;
                         case DatabaseType.SqlServer:
